@@ -6,19 +6,32 @@ import { Dashboard } from "./pages/Dashboard";
 import { Navbar } from "./components/Navbar";
 
 import { useState } from "react";
+import { AlertModal } from "./components/AlertModal";
 
 function App() {
   // // pastel", "forest"
-  // const [theme, setTheme] = useState<String>("forest");
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState<boolean>(false);
+  const [activeUser, setActiveUser] = useState<string>("");
+  const [alertMsg, setAlertMsg] = useState<{ h3: string; p: string }>({});
+
   return (
     <>
       <BrowserRouter>
-        <Navbar />
+        <Navbar
+          loggedIn={loggedIn}
+          setLoggedIn={setLoggedIn}
+          activeUser={activeUser}
+        />
+        <AlertModal alertMsg={alertMsg} />
         <Routes>
           <Route
             path="/"
-            element={<Home />}
+            element={
+              <Home
+                loggedIn={loggedIn}
+                activeUser={activeUser}
+              />
+            }
           />
           <Route
             path="login"
@@ -26,11 +39,21 @@ function App() {
           />
           <Route
             path="register"
-            element={<Register />}
+            element={
+              <Register
+                setLoggedIn={setLoggedIn}
+                setAlertMsg={setAlertMsg}
+              />
+            }
           />
           <Route
             path="/dashboard"
-            element={<Dashboard />}
+            element={
+              <Dashboard
+                loggedIn={loggedIn}
+                activeUser={activeUser}
+              />
+            }
           />
         </Routes>
       </BrowserRouter>

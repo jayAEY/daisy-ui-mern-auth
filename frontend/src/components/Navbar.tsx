@@ -1,32 +1,42 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-export const Navbar = () => {
+type NavbarProps = {
+  loggedIn: boolean;
+  setLoggedIn: (loggedIn: boolean) => void;
+  activeUser: string;
+};
+
+export const Navbar = ({ loggedIn, setLoggedIn }: NavbarProps) => {
   const [theme, setTheme] = useState<string>(
     localStorage.getItem("daisyui-theme") || ""
   );
   const setDark = () => {
+    setTheme("forest");
     document.documentElement.setAttribute("data-theme", "forest");
     localStorage.setItem("daisyui-theme", "forest");
   };
   const setLight = () => {
+    setTheme("pastel");
     document.documentElement.setAttribute("data-theme", "pastel");
     localStorage.setItem("daisyui-theme", "pastel");
   };
 
-  //   let theme = localStorage.getItem("daisyui-theme");
-
-  if (theme === "forest") {
-    setDark();
-  } else if (theme === "pastel") {
-    setLight();
-  }
+  useEffect(() => {
+    if (theme === "forest") {
+      setDark();
+    } else if (theme === "pastel") {
+      setLight();
+    }
+  }, []);
 
   function handleToggle(e: React.ChangeEvent<HTMLInputElement>) {
     e.target.checked ? setDark() : setLight();
   }
 
-  function logout() {}
+  function logout() {
+    setLoggedIn(false);
+  }
 
   return (
     <div className="navbar bg-base-100 shadow-xl">
@@ -74,61 +84,95 @@ export const Navbar = () => {
         </label>
       </div>
       <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">
-          <li>
-            <Link
-              className="text-primary hover:bg-base hover:text-base-content"
-              to="/"
-            >
-              Home
-            </Link>
-          </li>
-          <li>
-            <Link
-              className="text-primary hover:bg-base hover:text-base-content"
-              to="/dashboard"
-            >
-              Dashboard
-            </Link>
-          </li>
-        </ul>
-      </div>
-      <div className="navbar-end">
-        <div className="dropdown dropdown-end">
-          <div
-            tabIndex={0}
-            role="button"
-            className="btn btn-ghost btn-circle avatar"
-          >
-            <div className="w-10 rounded-full">
-              <img
-                alt="profile picture"
-                src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
-              />
-            </div>
-          </div>
-          <ul
-            tabIndex={0}
-            className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
-          >
+        {loggedIn ? (
+          <ul className="menu menu-horizontal px-1">
             <li>
               <Link
-                className="text-primary hover:bg-base hover:text-base-content"
+                className="font-semibold tracking-widest uppercase hover:bg-base hover:text-primary"
+                to="/"
+              >
+                Home
+              </Link>
+            </li>
+            <li>
+              <Link
+                className="font-semibold tracking-widest uppercase hover:bg-base hover:text-primary"
                 to="/dashboard"
               >
                 Dashboard
               </Link>
             </li>
+          </ul>
+        ) : (
+          <ul className="menu menu-horizontal px-1">
             <li>
               <Link
-                onClick={logout}
+                className="font-semibold tracking-widest uppercase hover:bg-base hover:text-primary"
                 to="/"
               >
-                Logout
+                Home
               </Link>
             </li>
           </ul>
-        </div>
+        )}
+      </div>
+      <div className="navbar-end">
+        {loggedIn ? (
+          <div className="dropdown dropdown-end">
+            <div
+              tabIndex={0}
+              role="button"
+              className="btn btn-ghost btn-circle avatar"
+            >
+              <div className="w-10 rounded-full">
+                <img
+                  alt="profile picture"
+                  src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
+                />
+              </div>
+            </div>
+            <ul
+              tabIndex={0}
+              className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
+            >
+              <li>
+                <Link
+                  className="hover:bg-base hover:text-primary"
+                  to="/dashboard"
+                >
+                  Dashboard
+                </Link>
+              </li>
+              <li>
+                <Link
+                  onClick={logout}
+                  to="/"
+                >
+                  Logout
+                </Link>
+              </li>
+            </ul>
+          </div>
+        ) : (
+          <ul className="menu menu-horizontal px-1">
+            <li>
+              <Link
+                className="font-semibold tracking-widest uppercase hover:bg-base hover:text-primary"
+                to="/register"
+              >
+                Register
+              </Link>
+            </li>
+            <li>
+              <Link
+                className="font-semibold tracking-widest uppercase hover:bg-base hover:text-primary"
+                to="/login"
+              >
+                Login
+              </Link>
+            </li>
+          </ul>
+        )}
       </div>
     </div>
   );
