@@ -35,7 +35,12 @@ function App() {
           />
           <Route
             path="login"
-            element={<Login />}
+            element={
+              <Login
+                setLoggedIn={setLoggedIn}
+                setAlertMsg={setAlertMsg}
+              />
+            }
           />
           <Route
             path="register"

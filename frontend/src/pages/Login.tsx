@@ -1,7 +1,41 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import axios from "axios";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
-export const Login = () => {
+type RegisterProps = {
+  setLoggedIn: (loggedIn: boolean) => void;
+  setAlertMsg: (alertMsg: { h3: string; p: string }) => void;
+};
+
+export const Login = ({ setLoggedIn, setAlertMsg }: LoginProps) => {
+  axios.defaults.withCredentials = true;
+  const navigate = useNavigate();
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    let showAlertModal = () => {
+      (document.getElementById("my_modal_1") as HTMLFormElement).showModal();
+    };
+
+    axios
+      .post(`${import.meta.env.VITE_API_URL}/login`, { email, password })
+      .then((res) => {
+        // res.data == "Success! You are now logged in"
+        //   ? (setAlertMsg({ h3: "Success!", p: `${email} is now registered!` }),
+        //     showAlertModal(),
+        //     setLoggedIn(true),
+        //     navigate("/login"))
+        //   : setAlertMsg({ h3: "Error!", p: res.data });
+        // showAlertModal();
+        // console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <div className="hero min-h-screen bg-base-200">
       <div className="hero-content flex-col lg:flex-row-reverse">
@@ -30,7 +64,7 @@ export const Login = () => {
                 required
               />
               <p className="label-text m-4 text-center">
-                Don't have an account?{" "}
+                Don't have an account?
                 <Link
                   to={"/register"}
                   className="hover:text-primary underline"
@@ -40,7 +74,12 @@ export const Login = () => {
               </p>
             </div>
             <div className="form-control">
-              <button className="btn btn-primary">Login</button>
+              <button
+                onClick={handleSubmit}
+                className="btn btn-primary"
+              >
+                Login
+              </button>
             </div>
           </form>
         </div>
