@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-type RegisterProps = {
+type LoginProps = {
   setLoggedIn: (loggedIn: boolean) => void;
   setAlertMsg: (alertMsg: { h3: string; p: string }) => void;
 };
@@ -23,14 +23,13 @@ export const Login = ({ setLoggedIn, setAlertMsg }: LoginProps) => {
     axios
       .post(`${import.meta.env.VITE_API_URL}/login`, { email, password })
       .then((res) => {
-        // res.data == "Success! You are now logged in"
-        //   ? (setAlertMsg({ h3: "Success!", p: `${email} is now registered!` }),
-        //     showAlertModal(),
-        //     setLoggedIn(true),
-        //     navigate("/login"))
-        //   : setAlertMsg({ h3: "Error!", p: res.data });
-        // showAlertModal();
-        // console.log(res.data);
+        res.data === "You are now logged in"
+          ? (setAlertMsg({ h3: "Success!", p: res.data }),
+            showAlertModal(),
+            setLoggedIn(true),
+            navigate("/dashboard"))
+          : setAlertMsg({ h3: "Error!", p: res.data }),
+          showAlertModal();
       })
       .catch((err) => {
         console.log(err);
@@ -47,6 +46,7 @@ export const Login = ({ setLoggedIn, setAlertMsg }: LoginProps) => {
                 <span className="label-text">Email</span>
               </label>
               <input
+                onChange={(e) => setEmail(e.target.value)}
                 type="email"
                 placeholder="email"
                 className="input input-bordered text-xs"
@@ -58,13 +58,14 @@ export const Login = ({ setLoggedIn, setAlertMsg }: LoginProps) => {
                 <span className="label-text">Password</span>
               </label>
               <input
+                onChange={(e) => setPassword(e.target.value)}
                 type="password"
                 placeholder="password"
                 className="input input-bordered text-xs"
                 required
               />
               <p className="label-text m-4 text-center">
-                Don't have an account?
+                Don't have an account?{" "}
                 <Link
                   to={"/register"}
                   className="hover:text-primary underline"

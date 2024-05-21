@@ -3,8 +3,6 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-const bcrypt = require("bcryptjs");
-const jwt = require("json-web-token");
 const routes = require("./routes/api.js");
 
 dotenv.config();

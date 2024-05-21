@@ -28,19 +28,12 @@ export const Register = ({ setLoggedIn, setAlertMsg }: RegisterProps) => {
             showAlertModal(),
             setLoggedIn(true),
             navigate("/login"))
-          : setAlertMsg({ h3: "Error!", p: res.data });
-        showAlertModal();
+          : setAlertMsg({ h3: "Error!", p: res.data }),
+          showAlertModal();
 
-        // // setAlertMsg({ h3: "Success!", p: `${email} is now registered!` });
-        // showAlertModal();
-        // setAlertMsg({ h1: "Success!", p: "You are now logged in" });
-        // setLoggedIn(true);
         console.log(res.data);
-        // navigate("/login");
       })
       .catch((err) => {
-        // setAlertMsg({ h3: "Error!", p: err });
-        // showAlertModal();
         console.log(err);
       });
   };

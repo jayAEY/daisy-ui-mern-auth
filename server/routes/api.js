@@ -1,7 +1,28 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
 const router = express.Router();
 const UserModel = require("../models/Users.js");
+
+dotenv.config();
+
+const verifyUser = (req, res, next) => {
+  const token = req.cookies.token;
+  if (!token) {
+    res.json({ login: false });
+  } else {
+    jwt.verify("token", process.env.JWT_KEY, (err, decoded) => {
+      if (err) {
+        return res.json({ message: "Invalid Token" });
+      } else {
+        req.email = decoded.email;
+        next();
+      }
+    });
+  }
+};
 
 router.get("/", (req, res) => {
   res.json("connected");
@@ -18,7 +39,8 @@ router.post("/api/register", async (req, res) => {
     if (user) {
       return res.send("User Already exists!");
     } else {
-      const newUser = new UserModel({ email, password });
+      const hashedPassword = await bcrypt.hash(password, 10);
+      const newUser = new UserModel({ email, password: hashedPassword });
       await newUser.save();
       res.send(`${email} is now registered!`);
     }
@@ -31,20 +53,43 @@ router.post("/api/register", async (req, res) => {
 router.post("/api/login", async (req, res) => {
   const { email, password } = req.body;
   try {
-    const user = await UserModel.findOne(email);
+    const user = await UserModel.findOne({ email });
     if (!user) {
-      return res.send("Error! No user exists");
+      return res.send("No user exists");
     } else {
-      if (user.password === password) {
-        res.send("Success! You are now logged in");
+      const validatedPassword = await bcrypt.compare(password, user.password);
+      if (validatedPassword) {
+        const token = jwt.sign({ email }, process.env.JWT_KEY);
+        res.cookie("token", token, {
+          httpOnly: true,
+          secure: true,
+          sameSite: "none",
+          partitioned: true,
+        });
+        return res.send("You are now logged in");
       } else {
-        return res.send("Error! Wrong Password");
+        return res.send("Wrong Password");
       }
     }
   } catch (err) {
     console.log(err);
     res.send(err);
   }
+});
+
+router.get("/api/verify", verifyUser, (req, res) => {
+  console.log({ login: true, email: req.email });
+  return res.json({ login: true, email: req.email });
+});
+
+router.get("/api/logout", (req, res) => {
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    partitioned: true,
+  });
+  return res.send("You are now logged in");
 });
 
 module.exports = router;

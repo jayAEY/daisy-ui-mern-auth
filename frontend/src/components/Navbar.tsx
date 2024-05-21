@@ -83,9 +83,10 @@ export const Navbar = ({ loggedIn, setLoggedIn }: NavbarProps) => {
           </svg>
         </label>
       </div>
-      <div className="navbar-center hidden lg:flex">
+      {/* <div className="navbar-center flex"></div> */}
+      <div className="navbar-end flex gap-3 mr-1">
         {loggedIn ? (
-          <ul className="menu menu-horizontal px-1">
+          <ul className="flex gap-2 px-1">
             <li>
               <Link
                 className="font-semibold tracking-widest uppercase hover:bg-base hover:text-primary"
@@ -104,19 +105,18 @@ export const Navbar = ({ loggedIn, setLoggedIn }: NavbarProps) => {
             </li>
           </ul>
         ) : (
-          <ul className="menu menu-horizontal px-1">
-            <li>
-              <Link
-                className="font-semibold tracking-widest uppercase hover:bg-base hover:text-primary"
-                to="/"
-              >
-                Home
-              </Link>
-            </li>
-          </ul>
+          // <ul className="menu menu-horizontal px-1">
+          // <ul>
+          //   <li>
+          <Link
+            className="font-semibold tracking-widest uppercase hover:bg-base hover:text-primary"
+            to="/"
+          >
+            Home
+          </Link>
+          //   </li>
+          // </ul>
         )}
-      </div>
-      <div className="navbar-end">
         {loggedIn ? (
           <div className="dropdown dropdown-end">
             <div
@@ -154,24 +154,26 @@ export const Navbar = ({ loggedIn, setLoggedIn }: NavbarProps) => {
             </ul>
           </div>
         ) : (
-          <ul className="menu menu-horizontal px-1">
-            <li>
-              <Link
-                className="font-semibold tracking-widest uppercase hover:bg-base hover:text-primary"
-                to="/register"
-              >
-                Register
-              </Link>
-            </li>
-            <li>
-              <Link
-                className="font-semibold tracking-widest uppercase hover:bg-base hover:text-primary"
-                to="/login"
-              >
-                Login
-              </Link>
-            </li>
-          </ul>
+          // <ul className="menu menu-horizontal px-1">
+          // <li>
+          <>
+            <Link
+              className="font-semibold tracking-widest uppercase hover:bg-base hover:text-primary"
+              to="/register"
+            >
+              Register
+            </Link>
+            {/* // </li>
+            // <li> */}
+            <Link
+              className="font-semibold tracking-widest uppercase hover:bg-base hover:text-primary"
+              to="/login"
+            >
+              Login
+            </Link>
+          </>
+          // </li>
+          // </ul>
         )}
       </div>
     </div>
