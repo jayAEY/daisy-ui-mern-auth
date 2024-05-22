@@ -1,13 +1,24 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 type NavbarProps = {
   loggedIn: boolean;
   setLoggedIn: (loggedIn: boolean) => void;
-  activeUser: string;
+  setActiveUser: (activeUser: string) => void;
+  setAlertMsg: (alertMsg: { h3: string; p: string }) => void;
+  // avatarUrl: string;
 };
 
-export const Navbar = ({ loggedIn, setLoggedIn }: NavbarProps) => {
+export const Navbar = ({
+  loggedIn,
+  setLoggedIn,
+  setActiveUser,
+  setAlertMsg,
+}: // avatarUrl,
+NavbarProps) => {
+  const navigate = useNavigate();
+
   const [theme, setTheme] = useState<string>(
     localStorage.getItem("daisyui-theme") || ""
   );
@@ -35,7 +46,19 @@ export const Navbar = ({ loggedIn, setLoggedIn }: NavbarProps) => {
   }
 
   function logout() {
-    setLoggedIn(false);
+    let showAlertModal = () => {
+      (document.getElementById("my_modal_1") as HTMLFormElement).showModal();
+    };
+
+    axios.get(`${import.meta.env.VITE_API_URL}/logout`).then((res) => {
+      if (res.data === "You are now logged out") {
+        setAlertMsg({ h3: "Success!", p: res.data }),
+          showAlertModal(),
+          setLoggedIn(false),
+          setActiveUser(""),
+          navigate("/");
+      }
+    });
   }
 
   return (
@@ -83,7 +106,6 @@ export const Navbar = ({ loggedIn, setLoggedIn }: NavbarProps) => {
           </svg>
         </label>
       </div>
-      {/* <div className="navbar-center flex"></div> */}
       <div className="navbar-end flex gap-3 mr-1">
         {loggedIn ? (
           <ul className="flex gap-2 px-1">
@@ -105,17 +127,12 @@ export const Navbar = ({ loggedIn, setLoggedIn }: NavbarProps) => {
             </li>
           </ul>
         ) : (
-          // <ul className="menu menu-horizontal px-1">
-          // <ul>
-          //   <li>
           <Link
             className="font-semibold tracking-widest uppercase hover:bg-base hover:text-primary"
             to="/"
           >
             Home
           </Link>
-          //   </li>
-          // </ul>
         )}
         {loggedIn ? (
           <div className="dropdown dropdown-end">
@@ -127,6 +144,7 @@ export const Navbar = ({ loggedIn, setLoggedIn }: NavbarProps) => {
               <div className="w-10 rounded-full">
                 <img
                   alt="profile picture"
+                  // src={avatarUrl}
                   src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
                 />
               </div>
@@ -154,8 +172,6 @@ export const Navbar = ({ loggedIn, setLoggedIn }: NavbarProps) => {
             </ul>
           </div>
         ) : (
-          // <ul className="menu menu-horizontal px-1">
-          // <li>
           <>
             <Link
               className="font-semibold tracking-widest uppercase hover:bg-base hover:text-primary"
@@ -163,8 +179,7 @@ export const Navbar = ({ loggedIn, setLoggedIn }: NavbarProps) => {
             >
               Register
             </Link>
-            {/* // </li>
-            // <li> */}
+
             <Link
               className="font-semibold tracking-widest uppercase hover:bg-base hover:text-primary"
               to="/login"
@@ -172,8 +187,6 @@ export const Navbar = ({ loggedIn, setLoggedIn }: NavbarProps) => {
               Login
             </Link>
           </>
-          // </li>
-          // </ul>
         )}
       </div>
     </div>

@@ -3,15 +3,15 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 type RegisterProps = {
-  setLoggedIn: (loggedIn: boolean) => void;
   setAlertMsg: (alertMsg: { h3: string; p: string }) => void;
 };
 
-export const Register = ({ setLoggedIn, setAlertMsg }: RegisterProps) => {
+export const Register = ({ setAlertMsg }: RegisterProps) => {
   axios.defaults.withCredentials = true;
   const navigate = useNavigate();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [avatar, setAvatar] = useState<string>("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,17 +21,18 @@ export const Register = ({ setLoggedIn, setAlertMsg }: RegisterProps) => {
     };
 
     axios
-      .post(`${import.meta.env.VITE_API_URL}/register`, { email, password })
+      .post(`${import.meta.env.VITE_API_URL}/register`, {
+        email,
+        password,
+        avatar,
+      })
       .then((res) => {
         res.data == `${email} is now registered!`
           ? (setAlertMsg({ h3: "Success!", p: `${email} is now registered!` }),
             showAlertModal(),
-            setLoggedIn(true),
             navigate("/login"))
           : setAlertMsg({ h3: "Error!", p: res.data }),
           showAlertModal();
-
-        console.log(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -67,8 +68,17 @@ export const Register = ({ setLoggedIn, setAlertMsg }: RegisterProps) => {
                 className="input input-bordered text-xs"
                 required
               />
+              <label className="label">
+                <span className="label-text">Profile Pic Url (optional)</span>
+              </label>
+              <input
+                onChange={(e) => setAvatar(e.target.value)}
+                type="text"
+                placeholder="url"
+                className="input input-bordered text-xs"
+              />
               <p className="label-text m-4 text-center">
-                Already have an account?
+                Already have an account?{" "}
                 <Link
                   to={"/login"}
                   className="hover:text-primary underline"

@@ -13,7 +13,7 @@ const verifyUser = (req, res, next) => {
   if (!token) {
     res.json({ login: false });
   } else {
-    jwt.verify("token", process.env.JWT_KEY, (err, decoded) => {
+    jwt.verify(token, process.env.JWT_KEY, (err, decoded) => {
       if (err) {
         return res.json({ message: "Invalid Token" });
       } else {
@@ -33,14 +33,18 @@ router.get("/api/test", (req, res) => {
 });
 
 router.post("/api/register", async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, avatar } = req.body;
   try {
     const user = await UserModel.findOne({ email });
     if (user) {
       return res.send("User Already exists!");
     } else {
       const hashedPassword = await bcrypt.hash(password, 10);
-      const newUser = new UserModel({ email, password: hashedPassword });
+      const newUser = new UserModel({
+        email,
+        password: hashedPassword,
+        avatar,
+      });
       await newUser.save();
       res.send(`${email} is now registered!`);
     }
@@ -67,6 +71,10 @@ router.post("/api/login", async (req, res) => {
           partitioned: true,
         });
         return res.send("You are now logged in");
+        // return res.json({
+        //   message: "You are now logged in",
+        //   avatar: user.avatar,
+        // });
       } else {
         return res.send("Wrong Password");
       }
@@ -78,7 +86,6 @@ router.post("/api/login", async (req, res) => {
 });
 
 router.get("/api/verify", verifyUser, (req, res) => {
-  console.log({ login: true, email: req.email });
   return res.json({ login: true, email: req.email });
 });
 
@@ -89,7 +96,7 @@ router.get("/api/logout", (req, res) => {
     sameSite: "none",
     partitioned: true,
   });
-  return res.send("You are now logged in");
+  return res.send("You are now logged out");
 });
 
 module.exports = router;

@@ -5,9 +5,16 @@ import { Link, useNavigate } from "react-router-dom";
 type LoginProps = {
   setLoggedIn: (loggedIn: boolean) => void;
   setAlertMsg: (alertMsg: { h3: string; p: string }) => void;
+  setActiveUser: (activeUser: string) => void;
+  // setAvatarUrl: (avatar: string) => void;
 };
 
-export const Login = ({ setLoggedIn, setAlertMsg }: LoginProps) => {
+export const Login = ({
+  setLoggedIn,
+  setAlertMsg,
+  setActiveUser,
+}: // setAvatarUrl,
+LoginProps) => {
   axios.defaults.withCredentials = true;
   const navigate = useNavigate();
   const [email, setEmail] = useState<string>("");
@@ -25,10 +32,14 @@ export const Login = ({ setLoggedIn, setAlertMsg }: LoginProps) => {
       .then((res) => {
         res.data === "You are now logged in"
           ? (setAlertMsg({ h3: "Success!", p: res.data }),
+            // ? (setAlertMsg({ h3: "Success!", p: res.data.message }),
             showAlertModal(),
             setLoggedIn(true),
+            setActiveUser(email),
+            // setAvatarUrl(res.data.avatar),
             navigate("/dashboard"))
           : setAlertMsg({ h3: "Error!", p: res.data }),
+          // : setAlertMsg({ h3: "Error!", p: res.data.message }),
           showAlertModal();
       })
       .catch((err) => {

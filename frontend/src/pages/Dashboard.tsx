@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
 
 type DashboardProps = {
@@ -14,9 +13,6 @@ export const Dashboard = ({ loggedIn, activeUser }: DashboardProps) => {
           <div className="max-w-2xl">
             <h1 className="text-8xl font-bold">Welcome {activeUser}! 😎</h1>
             <h2 className="text-xl m-4">You are now logged in.</h2>
-            <Link to={"/"}>
-              <button className="btn btn-primary">Logout</button>
-            </Link>
           </div>
         </div>
       ) : (

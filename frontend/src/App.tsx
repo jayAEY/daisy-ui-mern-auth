@@ -17,15 +17,18 @@ function App() {
     h3: "",
     p: "",
   });
+  // const [avatarUrl, setAvatarUrl] = useState<string>("");
 
   useEffect(() => {
     axios.get(`${import.meta.env.VITE_API_URL}/verify`).then((res) => {
       if (res.data.login === true) {
         setLoggedIn(true);
         setActiveUser(res.data.email);
+        console.log(res.data);
       } else {
         setLoggedIn(false);
         setActiveUser("");
+        console.log(res.data);
       }
     });
   }, []);
@@ -36,7 +39,9 @@ function App() {
         <Navbar
           loggedIn={loggedIn}
           setLoggedIn={setLoggedIn}
-          activeUser={activeUser}
+          setActiveUser={setActiveUser}
+          setAlertMsg={setAlertMsg}
+          // avatarUrl={avatarUrl}
         />
         <AlertModal alertMsg={alertMsg} />
         <Routes>
@@ -55,17 +60,14 @@ function App() {
               <Login
                 setLoggedIn={setLoggedIn}
                 setAlertMsg={setAlertMsg}
+                setActiveUser={setActiveUser}
+                // setAvatarUrl={setAvatarUrl}
               />
             }
           />
           <Route
             path="register"
-            element={
-              <Register
-                setLoggedIn={setLoggedIn}
-                setAlertMsg={setAlertMsg}
-              />
-            }
+            element={<Register setAlertMsg={setAlertMsg} />}
           />
           <Route
             path="/dashboard"
