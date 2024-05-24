@@ -61,9 +61,6 @@ router.post("/api/login", async (req, res) => {
     const user = await UserModel.findOne({ email });
     if (!user) {
       return res.send("No user exists");
-      // res.json({
-      //   message: "No user exists",
-      // });
     } else {
       const validatedPassword = await bcrypt.compare(password, user.password);
       if (validatedPassword) {
@@ -78,20 +75,22 @@ router.post("/api/login", async (req, res) => {
           partitioned: true,
         });
         return res.send("You are now logged in");
-        // return res.json({
-        //   message: "You are now logged in",
-        //   avatar: user.avatar,
-        // });
       } else {
-        // res.json({
-        //   message: "Wrong Password",
-        // });
         return res.send("Wrong Password");
       }
     }
   } catch (err) {
     console.log(err);
     res.send(err);
+  }
+});
+
+router.post("/api/forgot-password", async (req, res) => {
+  {email}=req.body
+  try {
+    
+  } catch (error) {
+    
   }
 });
 

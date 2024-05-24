@@ -4,6 +4,7 @@ import { Home } from "./pages/Home";
 import { Login } from "./pages/Login";
 import { Register } from "./pages/Register";
 import { Dashboard } from "./pages/Dashboard";
+import { ForgotPassword } from "./pages/ForgotPassword";
 import { Navbar } from "./components/Navbar";
 import { AlertModal } from "./components/AlertModal";
 import axios from "axios";
@@ -67,6 +68,10 @@ function App() {
               />
             }
           />
+          <Route
+            path="forgot-password"
+            element={<ForgotPassword loggedIn={loggedIn} />}
+          ></Route>
           <Route
             path="register"
             element={<Register setAlertMsg={setAlertMsg} />}

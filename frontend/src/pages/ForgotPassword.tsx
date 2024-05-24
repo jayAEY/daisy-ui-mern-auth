@@ -2,27 +2,20 @@ import axios from "axios";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-type LoginProps = {
-  setLoggedIn: (loggedIn: boolean) => void;
-  setAlertMsg: (alertMsg: { h3: string; p: string }) => void;
-  setActiveUser: (activeUser: string) => void;
+type ForgotPasswordProps = {
+  //   setLoggedIn: (loggedIn: boolean) => void;
+  //   setAlertMsg: (alertMsg: { h3: string; p: string }) => void;
+  //   setActiveUser: (activeUser: string) => void;
   loggedIn: boolean;
-  activeUser: string;
-  avatarUrl: string;
+  //   activeUser: string;
+  //   avatarUrl: string;
 };
 
-export const Login = ({
-  setLoggedIn,
-  setAlertMsg,
-  setActiveUser,
-  loggedIn,
-  activeUser,
-  avatarUrl,
-}: LoginProps) => {
+export const ForgotPassword = ({ loggedIn }) => {
   axios.defaults.withCredentials = true;
   const navigate = useNavigate();
   const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  //   const [password, setPassword] = useState<string>("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,21 +25,25 @@ export const Login = ({
     };
 
     axios
-      .post(`${import.meta.env.VITE_API_URL}/login`, { email, password })
+      .post(`${import.meta.env.VITE_API_URL}/forgot-password`, {
+        email,
+        password,
+      })
       .then((res) => {
-        res.data === "You are now logged in"
-          ? (setAlertMsg({ h3: "Success!", p: res.data }),
-            showAlertModal(),
-            setLoggedIn(true),
-            setActiveUser(email),
-            navigate("/dashboard"))
-          : setAlertMsg({ h3: "Error!", p: res.data }),
-          showAlertModal();
+        res.data === "You are now logged in";
+        // ? (setAlertMsg({ h3: "Success!", p: res.data }),
+        // showAlertModal(),
+        // setLoggedIn(true),
+        // setActiveUser(email),
+        // navigate("/dashboard"))
+        // : setAlertMsg({ h3: "Error!", p: res.data }),
+        // showAlertModal();
       })
       .catch((err) => {
         console.log(err);
       });
   };
+
   return (
     <div className="hero min-h-screen bg-base-200">
       {loggedIn ? (
@@ -94,13 +91,13 @@ export const Login = ({
                   <span className="label-text">Password</span>
                 </label>
                 <input
-                  onChange={(e) => setPassword(e.target.value)}
+                  // onChange={(e) => setPassword(e.target.value)}
                   type="password"
                   placeholder="password"
                   className="input input-bordered text-xs"
                   required
                 />
-                <p className="label-text m-2 text-center">
+                <p className="label-text m-4 text-center">
                   Don't have an account?{" "}
                   <Link
                     to={"/register"}
@@ -113,14 +110,6 @@ export const Login = ({
               <div className="form-control">
                 <button className="btn btn-primary">Login</button>
               </div>
-              <p className="label-text  text-center">
-                <Link
-                  to={"/forgot-password"}
-                  className="hover:text-primary underline"
-                >
-                  Forgot your password?{" "}
-                </Link>
-              </p>
             </form>
           </div>
         </div>
