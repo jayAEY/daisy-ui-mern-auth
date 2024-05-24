@@ -17,21 +17,20 @@ function App() {
     h3: "",
     p: "",
   });
-  // const [avatarUrl, setAvatarUrl] = useState<string>("");
+  const [avatarUrl, setAvatarUrl] = useState<string>("");
 
   useEffect(() => {
     axios.get(`${import.meta.env.VITE_API_URL}/verify`).then((res) => {
       if (res.data.login === true) {
         setLoggedIn(true);
         setActiveUser(res.data.email);
-        console.log(res.data);
+        setAvatarUrl(res.data.avatar);
       } else {
         setLoggedIn(false);
         setActiveUser("");
-        console.log(res.data);
       }
     });
-  }, []);
+  }, [loggedIn]);
 
   return (
     <>
@@ -41,7 +40,7 @@ function App() {
           setLoggedIn={setLoggedIn}
           setActiveUser={setActiveUser}
           setAlertMsg={setAlertMsg}
-          // avatarUrl={avatarUrl}
+          avatarUrl={avatarUrl}
         />
         <AlertModal alertMsg={alertMsg} />
         <Routes>
@@ -51,6 +50,7 @@ function App() {
               <Home
                 loggedIn={loggedIn}
                 activeUser={activeUser}
+                avatarUrl={avatarUrl}
               />
             }
           />
@@ -61,7 +61,9 @@ function App() {
                 setLoggedIn={setLoggedIn}
                 setAlertMsg={setAlertMsg}
                 setActiveUser={setActiveUser}
-                // setAvatarUrl={setAvatarUrl}
+                loggedIn={loggedIn}
+                activeUser={activeUser}
+                avatarUrl={avatarUrl}
               />
             }
           />
@@ -75,6 +77,7 @@ function App() {
               <Dashboard
                 loggedIn={loggedIn}
                 activeUser={activeUser}
+                avatarUrl={avatarUrl}
               />
             }
           />

@@ -7,7 +7,7 @@ type NavbarProps = {
   setLoggedIn: (loggedIn: boolean) => void;
   setActiveUser: (activeUser: string) => void;
   setAlertMsg: (alertMsg: { h3: string; p: string }) => void;
-  // avatarUrl: string;
+  avatarUrl: string;
 };
 
 export const Navbar = ({
@@ -15,8 +15,8 @@ export const Navbar = ({
   setLoggedIn,
   setActiveUser,
   setAlertMsg,
-}: // avatarUrl,
-NavbarProps) => {
+  avatarUrl,
+}: NavbarProps) => {
   const navigate = useNavigate();
 
   const [theme, setTheme] = useState<string>(
@@ -143,9 +143,13 @@ NavbarProps) => {
             >
               <div className="w-10 rounded-full">
                 <img
-                  alt="profile picture"
-                  // src={avatarUrl}
-                  src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
+                  alt="avatar"
+                  src={
+                    avatarUrl.length > 0
+                      ? avatarUrl
+                      : "https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg?20200418092106"
+                  }
+                  className="flex items-center bg-base-200"
                 />
               </div>
             </div>

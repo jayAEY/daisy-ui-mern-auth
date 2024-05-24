@@ -18,6 +18,7 @@ const verifyUser = (req, res, next) => {
         return res.json({ message: "Invalid Token" });
       } else {
         req.email = decoded.email;
+        req.avatar = decoded.avatar;
         next();
       }
     });
@@ -60,10 +61,16 @@ router.post("/api/login", async (req, res) => {
     const user = await UserModel.findOne({ email });
     if (!user) {
       return res.send("No user exists");
+      // res.json({
+      //   message: "No user exists",
+      // });
     } else {
       const validatedPassword = await bcrypt.compare(password, user.password);
       if (validatedPassword) {
-        const token = jwt.sign({ email }, process.env.JWT_KEY);
+        const token = jwt.sign(
+          { email, avatar: user.avatar },
+          process.env.JWT_KEY
+        );
         res.cookie("token", token, {
           httpOnly: true,
           secure: true,
@@ -76,6 +83,9 @@ router.post("/api/login", async (req, res) => {
         //   avatar: user.avatar,
         // });
       } else {
+        // res.json({
+        //   message: "Wrong Password",
+        // });
         return res.send("Wrong Password");
       }
     }
@@ -86,7 +96,7 @@ router.post("/api/login", async (req, res) => {
 });
 
 router.get("/api/verify", verifyUser, (req, res) => {
-  return res.json({ login: true, email: req.email });
+  return res.json({ login: true, email: req.email, avatar: req.avatar });
 });
 
 router.get("/api/logout", (req, res) => {
