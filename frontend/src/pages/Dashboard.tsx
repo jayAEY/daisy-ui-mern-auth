@@ -27,7 +27,9 @@ export const Dashboard = ({
             </div>
           </div>
           <div className="max-w-2xl">
-            <h1 className="text-8xl font-bold">Welcome {activeUser}! 😎</h1>
+            <h1 className="text-4xl font-bold text-wrap">
+              Welcome {activeUser}! 😎
+            </h1>
             <h2 className="text-xl m-4">You are now logged in.</h2>
           </div>
         </div>

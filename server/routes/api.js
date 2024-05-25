@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 const router = express.Router();
 const UserModel = require("../models/Users.js");
+const nodemailer = require("nodemailer");
 
 dotenv.config();
 
@@ -86,11 +87,57 @@ router.post("/api/login", async (req, res) => {
 });
 
 router.post("/api/forgot-password", async (req, res) => {
-  {email}=req.body
+  const { email } = req.body;
   try {
-    
-  } catch (error) {
-    
+    const user = await UserModel.findOne({ email });
+    if (!user) {
+      return res.send("No user exists");
+    } else {
+      const token = jwt.sign({ id: user._id }, process.env.JWT_KEY, {
+        expiresIn: "1d",
+      });
+
+      let transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: { user: "joapuya@gmail.com", pass: process.env.APP_PASSWORD },
+      });
+
+      let mailOptions = {
+        from: "joapuya@gmail.com",
+        to: "joapuya@gmail.com",
+        subject: "Password Reset",
+        text: `${process.env.FRONTEND_URL}/${user._id}/${token}`,
+      };
+
+      transporter.sendMail(mailOptions, (err, info) => {
+        try {
+          return res.send("Email sent");
+        } catch (err) {
+          console.log(err);
+        }
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    res.send(err);
+  }
+});
+
+router.post("/api/reset-password/:id/:token", (req, res) => {
+  const { id, token } = req.params;
+  const { password } = req.body;
+  try {
+    jwt.verify(token, process.env.JWT_KEY, async (err, decoded) => {
+      // try {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      await UserModel.findByIdAndUpdate(
+        { _id: id },
+        { password: hashedPassword }
+      );
+      return res.send("Success");
+    });
+  } catch (err) {
+    return res.send(err);
   }
 });
 

@@ -8,6 +8,7 @@ import { ForgotPassword } from "./pages/ForgotPassword";
 import { Navbar } from "./components/Navbar";
 import { AlertModal } from "./components/AlertModal";
 import axios from "axios";
+import { ResetPassword } from "./pages/ResetPassword";
 
 function App() {
   axios.defaults.withCredentials = true;
@@ -70,8 +71,26 @@ function App() {
           />
           <Route
             path="forgot-password"
-            element={<ForgotPassword loggedIn={loggedIn} />}
-          ></Route>
+            element={
+              <ForgotPassword
+                setAlertMsg={setAlertMsg}
+                loggedIn={loggedIn}
+                activeUser={activeUser}
+                avatarUrl={avatarUrl}
+              />
+            }
+          />
+          <Route
+            path="reset-password/:id/:token"
+            element={
+              <ResetPassword
+                setAlertMsg={setAlertMsg}
+                loggedIn={loggedIn}
+                activeUser={activeUser}
+                avatarUrl={avatarUrl}
+              />
+            }
+          />
           <Route
             path="register"
             element={<Register setAlertMsg={setAlertMsg} />}

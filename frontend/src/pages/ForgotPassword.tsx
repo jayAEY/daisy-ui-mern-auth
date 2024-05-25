@@ -3,23 +3,24 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 type ForgotPasswordProps = {
-  //   setLoggedIn: (loggedIn: boolean) => void;
-  //   setAlertMsg: (alertMsg: { h3: string; p: string }) => void;
-  //   setActiveUser: (activeUser: string) => void;
+  setAlertMsg: (alertMsg: { h3: string; p: string }) => void;
   loggedIn: boolean;
-  //   activeUser: string;
-  //   avatarUrl: string;
+  activeUser: string;
+  avatarUrl: string;
 };
 
-export const ForgotPassword = ({ loggedIn }) => {
+export const ForgotPassword = ({
+  setAlertMsg,
+  loggedIn,
+  activeUser,
+  avatarUrl,
+}: ForgotPasswordProps) => {
   axios.defaults.withCredentials = true;
   const navigate = useNavigate();
   const [email, setEmail] = useState<string>("");
-  //   const [password, setPassword] = useState<string>("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
     let showAlertModal = () => {
       (document.getElementById("my_modal_1") as HTMLFormElement).showModal();
     };
@@ -27,17 +28,17 @@ export const ForgotPassword = ({ loggedIn }) => {
     axios
       .post(`${import.meta.env.VITE_API_URL}/forgot-password`, {
         email,
-        password,
       })
       .then((res) => {
-        res.data === "You are now logged in";
-        // ? (setAlertMsg({ h3: "Success!", p: res.data }),
-        // showAlertModal(),
-        // setLoggedIn(true),
-        // setActiveUser(email),
-        // navigate("/dashboard"))
-        // : setAlertMsg({ h3: "Error!", p: res.data }),
-        // showAlertModal();
+        console.log(res.data);
+        res.data === "Email sent"
+          ? (setAlertMsg({
+              h3: "Email sent!",
+              p: "Check your email for password reset link",
+            }),
+            showAlertModal(),
+            navigate("/login"))
+          : (setAlertMsg({ h3: "Error!", p: res.data }), showAlertModal());
       })
       .catch((err) => {
         console.log(err);
@@ -61,7 +62,9 @@ export const ForgotPassword = ({ loggedIn }) => {
               </div>
             </div>
             <div className="max-w-2xl">
-              <h1 className="text-8xl font-bold">Welcome {activeUser}! 😎</h1>
+              <h1 className="text-4xl font-bold text-wrap">
+                Welcome {activeUser}! 😎
+              </h1>
               <h2 className="text-xl m-4">You are now logged in.</h2>
             </div>
           </div>
@@ -73,10 +76,10 @@ export const ForgotPassword = ({ loggedIn }) => {
               className="card-body"
               onSubmit={handleSubmit}
             >
-              <h1 className="font-extrabold text-3xl">Login</h1>
+              <h1 className="font-extrabold text-3xl">Forgot your password?</h1>
               <div className="form-control">
                 <label className="label">
-                  <span className="label-text">Email</span>
+                  <span className="label-text">Enter your email to reset</span>
                 </label>
                 <input
                   onChange={(e) => setEmail(e.target.value)}
@@ -87,16 +90,6 @@ export const ForgotPassword = ({ loggedIn }) => {
                 />
               </div>
               <div className="form-control">
-                <label className="label">
-                  <span className="label-text">Password</span>
-                </label>
-                <input
-                  // onChange={(e) => setPassword(e.target.value)}
-                  type="password"
-                  placeholder="password"
-                  className="input input-bordered text-xs"
-                  required
-                />
                 <p className="label-text m-4 text-center">
                   Don't have an account?{" "}
                   <Link
@@ -108,7 +101,7 @@ export const ForgotPassword = ({ loggedIn }) => {
                 </p>
               </div>
               <div className="form-control">
-                <button className="btn btn-primary">Login</button>
+                <button className="btn btn-primary">Send reset email</button>
               </div>
             </form>
           </div>
