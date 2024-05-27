@@ -12,7 +12,6 @@ app.use(express.json());
 app.use(
   cors({
     origin: [
-      "http://localhost:5173",
       "https://daisy-ui-mern-auth-frontend.vercel.app",
     ],
     credentials: true,
