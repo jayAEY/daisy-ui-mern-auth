@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 type ResetPasswordProps = {
   setAlertMsg: (alertMsg: { h3: string; p: string }) => void;
