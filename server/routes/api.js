@@ -104,7 +104,7 @@ router.post("/api/forgot-password", async (req, res) => {
 
       let mailOptions = {
         from: "joapuya@gmail.com",
-        to: "joapuya@gmail.com",
+        to: email,
         subject: "Password Reset",
         text: `${process.env.FRONTEND_URL}/${user._id}/${token}`,
       };
