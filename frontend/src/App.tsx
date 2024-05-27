@@ -93,7 +93,14 @@ function App() {
           />
           <Route
             path="register"
-            element={<Register setAlertMsg={setAlertMsg} />}
+            element={
+              <Register
+                setAlertMsg={setAlertMsg}
+                loggedIn={loggedIn}
+                activeUser={activeUser}
+                avatarUrl={avatarUrl}
+              />
+            }
           />
           <Route
             path="/dashboard"

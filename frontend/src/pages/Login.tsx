@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { Dashboard } from "./Dashboard";
 
 type LoginProps = {
   setLoggedIn: (loggedIn: boolean) => void;
@@ -50,27 +51,11 @@ export const Login = ({
   return (
     <div className="hero min-h-screen bg-base-200">
       {loggedIn ? (
-        <div className="hero min-h-screen bg-base-200">
-          <div className="hero-content flex-col text-center">
-            <div className="avatar">
-              <div className="w-60 rounded-full">
-                <img
-                  src={
-                    avatarUrl.length > 0
-                      ? avatarUrl
-                      : "https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg?20200418092106"
-                  }
-                />
-              </div>
-            </div>
-            <div className="max-w-2xl">
-              <h1 className="text-4xl font-bold text-wrap">
-                Welcome {activeUser}! 😎
-              </h1>
-              <h2 className="text-xl m-4">You are already logged in.</h2>
-            </div>
-          </div>
-        </div>
+        <Dashboard
+          loggedIn={loggedIn}
+          activeUser={activeUser}
+          avatarUrl={avatarUrl}
+        />
       ) : (
         <div className="hero-content flex-col lg:flex-row-reverse">
           <div className="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
