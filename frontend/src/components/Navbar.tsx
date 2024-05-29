@@ -17,6 +17,7 @@ export const Navbar = ({
   setAlertMsg,
   avatarUrl,
 }: NavbarProps) => {
+  axios.defaults.withCredentials = true;
   const navigate = useNavigate();
 
   const [theme, setTheme] = useState<string>(

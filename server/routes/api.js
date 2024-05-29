@@ -128,7 +128,6 @@ router.post("/api/reset-password/:id/:token", (req, res) => {
   const { password } = req.body;
   try {
     jwt.verify(token, process.env.JWT_KEY, async (err, decoded) => {
-      // try {
       const hashedPassword = await bcrypt.hash(password, 10);
       await UserModel.findByIdAndUpdate(
         { _id: id },
