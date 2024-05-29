@@ -32,6 +32,18 @@ function App() {
         setActiveUser("");
       }
     });
+  }, []);
+  useEffect(() => {
+    axios.get(`${import.meta.env.VITE_API_URL}/verify`).then((res) => {
+      if (res.data.login === true) {
+        setLoggedIn(true);
+        setActiveUser(res.data.email);
+        setAvatarUrl(res.data.avatar);
+      } else {
+        setLoggedIn(false);
+        setActiveUser("");
+      }
+    });
   }, [loggedIn]);
 
   return (
