@@ -63,6 +63,7 @@ function App() {
                 setLoggedIn={setLoggedIn}
                 setAlertMsg={setAlertMsg}
                 setActiveUser={setActiveUser}
+                setAvatarUrl={setAvatarUrl}
                 loggedIn={loggedIn}
                 activeUser={activeUser}
                 avatarUrl={avatarUrl}

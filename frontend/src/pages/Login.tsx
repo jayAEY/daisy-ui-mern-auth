@@ -7,6 +7,7 @@ type LoginProps = {
   setLoggedIn: (loggedIn: boolean) => void;
   setAlertMsg: (alertMsg: { h3: string; p: string }) => void;
   setActiveUser: (activeUser: string) => void;
+  setAvatarUrl: (avatarUrl: string) => void;
   loggedIn: boolean;
   activeUser: string;
   avatarUrl: string;
@@ -16,6 +17,7 @@ export const Login = ({
   setLoggedIn,
   setAlertMsg,
   setActiveUser,
+  setAvatarUrl,
   loggedIn,
   activeUser,
   avatarUrl,
@@ -36,11 +38,12 @@ export const Login = ({
     axios
       .post(`${import.meta.env.VITE_API_URL}/login`, { email, password })
       .then((res) => {
-        res.data === "You are now logged in"
-          ? (setAlertMsg({ h3: "Success!", p: res.data }),
+        res.data[0] === "You are now logged in"
+          ? (setAlertMsg({ h3: "Success!", p: res.data[0] }),
             showAlertModal(),
             setLoggedIn(true),
             setActiveUser(email),
+            setAvatarUrl(res.data[1]),
             navigate("/dashboard"))
           : setAlertMsg({ h3: "Error!", p: res.data }),
           showAlertModal();
@@ -106,7 +109,7 @@ export const Login = ({
                   to={"/forgot-password"}
                   className="hover:text-primary underline"
                 >
-                  Forgot your password?{" "}
+                  Forgot your password?
                 </Link>
               </p>
             </form>

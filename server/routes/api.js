@@ -75,7 +75,7 @@ router.post("/api/login", async (req, res) => {
           sameSite: "none",
           partitioned: true,
         });
-        return res.send("You are now logged in");
+        return res.send(["You are now logged in", user.avatar]);
       } else {
         return res.send("Wrong Password");
       }
